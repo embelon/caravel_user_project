@@ -4,3 +4,6 @@
 [submodule "openram_testchip"]
 	path = openram_testchip
 	url = https://github.com/VLSIDA/openram_testchip
+[submodule "wb_openram_wrapper"]
+	path = wb_openram_wrapper
+	url = https://github.com/embelon/wb_openram_wrapper
