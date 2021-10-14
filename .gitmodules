@@ -1,3 +1,6 @@
 [submodule "caravel-lite"]
 	path = caravel
 	url = https://github.com/efabless/caravel-lite
+[submodule "openram_testchip"]
+	path = openram_testchip
+	url = https://github.com/VLSIDA/openram_testchip
