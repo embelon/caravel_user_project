@@ -21,8 +21,10 @@
     // Assume default net type to be wire because GL netlists don't have the wire definitions
     `default_nettype wire
     `include "gl/user_project_wrapper.v"
-    `include "gl/user_proj_example.v"
+    `include "../wb_openram_wrapper/src/wb_openram_wrapper.v"
+    `include "../openram_testchip/verilog/rtl/sky130_sram_1kbyte_1rw1r_32x256_8.v"
 `else
     `include "user_project_wrapper.v"
-    `include "user_proj_example.v"
+    `include "../../wb_openram_wrapper/src/wb_openram_wrapper.v"
+    `include "../../openram_testchip/verilog/rtl/sky130_sram_1kbyte_1rw1r_32x256_8.v"
 `endif

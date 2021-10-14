@@ -82,40 +82,64 @@ module user_project_wrapper #(
 /* User project is instantiated  here   */
 /*--------------------------------------*/
 
-user_proj_example mprj (
+wire openram_clk0;
+wire openram_csb0;
+wire openram_web0;
+wire [3:0] openram_wmask0;
+wire [7:0] openram_addr0;
+wire [31:0] openram_din0;
+wire [31:0] openram_dout0;
+
+sky130_sram_1kbyte_1rw1r_32x256_8 openram_1kB
+(
 `ifdef USE_POWER_PINS
-	.vccd1(vccd1),	// User area 1 1.8V power
-	.vssd1(vssd1),	// User area 1 digital ground
+    .vccd1 (vccd1),
+    .vssd1 (vssd1),
 `endif
 
-    .wb_clk_i(wb_clk_i),
-    .wb_rst_i(wb_rst_i),
+    .clk0 (openram_clk0),
+    .csb0 (openram_csb0),
+    .web0 (openram_web0),
+    .wmask0 (openram_wmask0),
+    .addr0 (openram_addr0),
+    .din0 (openram_din0),
+    .dout0 (openram_dout0)
+);
 
-    // MGMT SoC Wishbone Slave
+wb_openram_wrapper wb_openram_wrapper
+(
+`ifdef USE_POWER_PINS
+    .vdda1 (vdda1),	    // User area 1 3.3V supply
+    .vdda2 (vdda2),	    // User area 2 3.3V supply
+    .vssa1 (vssa1),	    // User area 1 analog ground
+    .vssa2 (vssa2),	    // User area 2 analog ground
+    .vccd1 (vccd1),	    // User area 1 1.8V supply
+    .vccd2 (vccd2),	    // User area 2 1.8v supply
+    .vssd1 (vssd1),	    // User area 1 digital ground
+    .vssd2 (vssd2),	    // User area 2 digital ground
+`endif
 
-    .wbs_cyc_i(wbs_cyc_i),
-    .wbs_stb_i(wbs_stb_i),
-    .wbs_we_i(wbs_we_i),
-    .wbs_sel_i(wbs_sel_i),
-    .wbs_adr_i(wbs_adr_i),
-    .wbs_dat_i(wbs_dat_i),
-    .wbs_ack_o(wbs_ack_o),
-    .wbs_dat_o(wbs_dat_o),
+    // Wishbone port A
+    .wb_clk_i (wb_clk_i),
+    .wb_rst_i (wb_rst_i),
+    .wbs_stb_i (wbs_stb_i),
+    .wbs_cyc_i (wbs_cyc_i),
+    .wbs_we_i (wbs_we_i),
+    .wbs_sel_i (wbs_sel_i),
+    .wbs_dat_i (wbs_dat_i),
+    .wbs_adr_i (wbs_adr_i),
+    .wbs_ack_o (wbs_ack_o),
+    .wbs_dat_o (wbs_dat_o),
 
-    // Logic Analyzer
-
-    .la_data_in(la_data_in),
-    .la_data_out(la_data_out),
-    .la_oenb (la_oenb),
-
-    // IO Pads
-
-    .io_in (io_in),
-    .io_out(io_out),
-    .io_oeb(io_oeb),
-
-    // IRQ
-    .irq(user_irq)
+    // OpenRAM interface
+    // Port 0: RW
+    .clk0 (openram_clk0),       // clock
+    .csb0 (openram_csb0),       // active low chip select
+    .web0 (openram_web0),       // active low write control
+    .wmask0 (openram_wmask0),   // write mask
+    .addr0 (openram_addr0),
+    .din0 (openram_din0),
+    .dout0 (openram_dout0)
 );
 
 endmodule	// user_project_wrapper
