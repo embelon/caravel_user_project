@@ -138,8 +138,8 @@ wb_openram_wrapper wb_openram_wrapper
     .web0 (openram_web0),       // active low write control
     .wmask0 (openram_wmask0),   // write mask
     .addr0 (openram_addr0),
-    .din0 (openram_din0),
-    .dout0 (openram_dout0)
+    .din0 (openram_dout0),
+    .dout0 (openram_din0)
 );
 
 endmodule	// user_project_wrapper
