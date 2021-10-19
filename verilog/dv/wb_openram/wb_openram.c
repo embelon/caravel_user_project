@@ -93,26 +93,23 @@ void main()
 	reg_mprj_datal = 0xAB600000;
 
 	// Fill memory
-	for (address = 0; address < OPENRAM_SIZE_DWORDS; address += 32)
+	for (address = 0; address < OPENRAM_SIZE_DWORDS; address += 4)
 	{
 		// generate some dword based on address
 		OPENRAM_MEM(address) = generate_value(address);
 	}
 
 	// Check memory
-	err_cnt = 0;
-	for (address = 0; address < OPENRAM_SIZE_DWORDS; address += 32)
+	for (address = 0; address < OPENRAM_SIZE_DWORDS; address += 4)
 	{
 		// check dword based on address
 		if (OPENRAM_MEM(address) != generate_value(address))
 		{
-			err_cnt++;
+			reg_mprj_datal = 0xAB61dead;		
+			return;							// instant fail
 		}
 	}
 
-	if (err_cnt == 0)
-	{
-		reg_mprj_datal = 0xAB610000;
-	}
+	reg_mprj_datal = 0xAB610000;			// pass
 }
 
