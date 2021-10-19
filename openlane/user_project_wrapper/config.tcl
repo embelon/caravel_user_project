@@ -59,8 +59,11 @@ set ::env(EXTRA_LEFS) "\
 	$script_dir/../../openram_testchip/lef/sky130_sram_1kbyte_1rw1r_32x256_8.lef"
 
 set ::env(EXTRA_GDS_FILES) "\
-	$script_dir/../../wb_openram_wrapper/lef/wb_openram_wrapper.gds \
-	$script_dir/../../openram_testchip/lef/sky130_sram_1kbyte_1rw1r_32x256_8.gds"
+	$script_dir/../../wb_openram_wrapper/gds/wb_openram_wrapper.gds \
+	$script_dir/../../openram_testchip/gds/sky130_sram_1kbyte_1rw1r_32x256_8.gds"
+
+# use 4 cores
+set ::env(ROUTING_CORES) 4
 
 set ::env(GLB_RT_MAXLAYER) 5
 
