@@ -67,6 +67,9 @@ set ::env(ROUTING_CORES) 4
 
 set ::env(GLB_RT_MAXLAYER) 5
 
+set ::env(FP_HORIZONTAL_HALO) 20
+set ::env(FP_VERTICAL_HALO) 20
+
 # disable pdn check nodes becuase it hangs with multiple power domains.
 # any issue with pdn connections will be flagged with LVS so it is not a critical check.
 set ::env(FP_PDN_CHECK_NODES) 0
