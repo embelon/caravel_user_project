@@ -84,22 +84,6 @@ void main()
 	reg_mprj_io_18 = GPIO_MODE_MGMT_STD_OUTPUT;
 	reg_mprj_io_17 = GPIO_MODE_MGMT_STD_OUTPUT;
 	reg_mprj_io_16 = GPIO_MODE_MGMT_STD_OUTPUT;
-	reg_mprj_io_15 = GPIO_MODE_MGMT_STD_OUTPUT;
-	reg_mprj_io_14 = GPIO_MODE_MGMT_STD_OUTPUT;
-	reg_mprj_io_13 = GPIO_MODE_MGMT_STD_OUTPUT;
-	reg_mprj_io_12 = GPIO_MODE_MGMT_STD_OUTPUT;
-	reg_mprj_io_11 = GPIO_MODE_MGMT_STD_OUTPUT;
-	reg_mprj_io_10 = GPIO_MODE_MGMT_STD_OUTPUT;
-	reg_mprj_io_9 = GPIO_MODE_MGMT_STD_OUTPUT;
-	reg_mprj_io_8 = GPIO_MODE_MGMT_STD_OUTPUT;
-	reg_mprj_io_7 = GPIO_MODE_MGMT_STD_OUTPUT;
-	reg_mprj_io_6 = GPIO_MODE_MGMT_STD_OUTPUT;
-	reg_mprj_io_5 = GPIO_MODE_MGMT_STD_OUTPUT;
-	reg_mprj_io_4 = GPIO_MODE_MGMT_STD_OUTPUT;
-	reg_mprj_io_3 = GPIO_MODE_MGMT_STD_OUTPUT;
-	reg_mprj_io_2 = GPIO_MODE_MGMT_STD_OUTPUT;
-	reg_mprj_io_1 = GPIO_MODE_MGMT_STD_OUTPUT;
-	reg_mprj_io_0 = GPIO_MODE_MGMT_STD_OUTPUT;
 
 	/* Apply configuration */
 	reg_mprj_xfer = 1;
@@ -121,11 +105,11 @@ void main()
 		// check dword based on address
 		if (OPENRAM_MEM(address) != generate_value(address))
 		{
-			reg_mprj_datal = 0xAB61dead;		
+			reg_mprj_datal = 0xAB7E0000;		
 			return;							// instant fail
 		}
 	}
 
-	reg_mprj_datal = 0xAB610000;			// pass
+	reg_mprj_datal = 0xAB700000;			// pass
 }
 

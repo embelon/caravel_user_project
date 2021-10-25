@@ -127,13 +127,13 @@ wb_openram_wrapper wb_openram_wrapper
 
     // OpenRAM interface
     // Port 0: RW
-    .clk0 (openram_clk0),       // clock
-    .csb0 (openram_csb0),       // active low chip select
-    .web0 (openram_web0),       // active low write control
-    .wmask0 (openram_wmask0),   // write mask
-    .addr0 (openram_addr0),
-    .din0 (openram_dout0),
-    .dout0 (openram_din0)
+    .ram_clk0 (openram_clk0),       // clock
+    .ram_csb0 (openram_csb0),       // active low chip select
+    .ram_web0 (openram_web0),       // active low write control
+    .ram_wmask0 (openram_wmask0),   // write mask
+    .ram_addr0 (openram_addr0),
+    .ram_din0 (openram_dout0),
+    .ram_dout0 (openram_din0)
 );
 
 endmodule	// user_project_wrapper
