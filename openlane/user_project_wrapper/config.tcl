@@ -55,15 +55,21 @@ set ::env(MACRO_PLACEMENT_CFG) $script_dir/macro.cfg
 set ::env(VERILOG_FILES_BLACKBOX) "\
 	$::env(CARAVEL_ROOT)/verilog/rtl/defines.v \
 	$script_dir/../../wb_openram_wrapper/src/wb_openram_wrapper.v \
-	$script_dir/../../openram_testchip/verilog/rtl/sky130_sram_1kbyte_1rw1r_32x256_8.v"
+	$::env(PDK_ROOT)/$::env(PDK)/libs.ref/sky130_sram_macros/verilog/sky130_sram_1kbyte_1rw1r_32x256_8.v"
+
+## $script_dir/../../openram_testchip/verilog/rtl/sky130_sram_1kbyte_1rw1r_32x256_8.v
 
 set ::env(EXTRA_LEFS) "\
 	$script_dir/../../wb_openram_wrapper/lef/wb_openram_wrapper.lef \
-	$script_dir/../../openram_testchip/lef/sky130_sram_1kbyte_1rw1r_32x256_8.lef"
+	$::env(PDK_ROOT)/$::env(PDK)/libs.ref/sky130_sram_macros/lef/sky130_sram_1kbyte_1rw1r_32x256_8.lef"
+
+## $script_dir/../../openram_testchip/lef/sky130_sram_1kbyte_1rw1r_32x256_8.lef
 
 set ::env(EXTRA_GDS_FILES) "\
 	$script_dir/../../wb_openram_wrapper/gds/wb_openram_wrapper.gds \
-	$script_dir/../../openram_testchip/gds/sky130_sram_1kbyte_1rw1r_32x256_8.gds"
+	$::env(PDK_ROOT)/$::env(PDK)/libs.ref/sky130_sram_macros/gds/sky130_sram_1kbyte_1rw1r_32x256_8.gds"
+
+## $script_dir/../../openram_testchip/gds/sky130_sram_1kbyte_1rw1r_32x256_8.gds"
 
 # use 4 cores
 set ::env(ROUTING_CORES) 4
