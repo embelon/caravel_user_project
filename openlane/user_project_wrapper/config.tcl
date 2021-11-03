@@ -52,8 +52,10 @@ set ::env(FP_PDN_MACRO_HOOKS) "\
 	wb_openram_wrapper vccd1 vssd1 \
 	openram_1kB vccd1 vssd1 "
 
-set ::env(VDD_NETS) "vccd1"
-set ::env(GND_NETS) "vssd1"
+## set ::env(VDD_NETS) "vccd1"
+## set ::env(GND_NETS) "vssd1"
+set ::env(VDD_NETS) "vccd1 vccd2 vdda1 vdda2"
+set ::env(GND_NETS) "vssd1 vssd2 vssa1 vssa2"
 
 # disable pdn check nodes becuase it hangs with multiple power domains.
 # any issue with pdn connections will be flagged with LVS so it is not a critical check.
