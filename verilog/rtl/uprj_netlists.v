@@ -22,9 +22,9 @@
     `default_nettype wire
     `include "gl/user_project_wrapper.v"
     `include "../wb_openram_wrapper/src/wb_openram_wrapper.v"
-    `include "../openram_testchip/verilog/rtl/sky130_sram_1kbyte_1rw1r_32x256_8.v"
+    `include "libs.ref/sky130_sram_macros/verilog/sky130_sram_1kbyte_1rw1r_32x256_8.v"
 `else
     `include "user_project_wrapper.v"
     `include "../../wb_openram_wrapper/src/wb_openram_wrapper.v"
-    `include "../../openram_testchip/verilog/rtl/sky130_sram_1kbyte_1rw1r_32x256_8.v"
+    `include "libs.ref/sky130_sram_macros/verilog/sky130_sram_1kbyte_1rw1r_32x256_8.v"
 `endif
