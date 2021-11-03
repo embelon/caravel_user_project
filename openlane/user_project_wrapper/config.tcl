@@ -38,15 +38,28 @@ set ::env(VERILOG_FILES) "\
 	$script_dir/../../verilog/rtl/user_project_wrapper.v"
 
 ## Clock configurations
-set ::env(CLOCK_PORT) "wb_clk_i"
-set ::env(CLOCK_NET) "mprj.wb_clk_i"
+set ::env(CLOCK_PORT) [list {wb_clk_i user_clock2}]
+set ::env(CLOCK_NET) [list {openram_1kB.openram_clk0 wb_openram_wrapper.wb_clk_i}]
 
 set ::env(CLOCK_PERIOD) "10"
 
 ## Internal Macros
 ### Macro PDN Connections
+set ::env(FP_PDN_ENABLE_MACROS_GRID) "1"
+## set ::env(FP_PDN_ENABLE_GLOBAL_CONNECTIONS) "1"
+
 set ::env(FP_PDN_MACRO_HOOKS) "\
-	mprj vccd1 vssd1"
+	wb_openram_wrapper vccd1 vssd1 \
+	openram_1kB vccd1 vssd1 "
+
+set ::env(VDD_NETS) "vccd1"
+set ::env(GND_NETS) "vssd1"
+
+# disable pdn check nodes becuase it hangs with multiple power domains.
+# any issue with pdn connections will be flagged with LVS so it is not a critical check.
+set ::env(FP_PDN_CHECK_NODES) 0
+
+set ::env(FP_PDN_ENABLE_RAILS) 0
 
 ### Macro Placement
 set ::env(MACRO_PLACEMENT_CFG) $script_dir/macro.cfg
@@ -57,19 +70,13 @@ set ::env(VERILOG_FILES_BLACKBOX) "\
 	$script_dir/../../wb_openram_wrapper/src/wb_openram_wrapper.v \
 	$::env(PDK_ROOT)/$::env(PDK)/libs.ref/sky130_sram_macros/verilog/sky130_sram_1kbyte_1rw1r_32x256_8.v"
 
-## $script_dir/../../openram_testchip/verilog/rtl/sky130_sram_1kbyte_1rw1r_32x256_8.v
-
 set ::env(EXTRA_LEFS) "\
 	$script_dir/../../wb_openram_wrapper/lef/wb_openram_wrapper.lef \
 	$::env(PDK_ROOT)/$::env(PDK)/libs.ref/sky130_sram_macros/lef/sky130_sram_1kbyte_1rw1r_32x256_8.lef"
 
-## $script_dir/../../openram_testchip/lef/sky130_sram_1kbyte_1rw1r_32x256_8.lef
-
 set ::env(EXTRA_GDS_FILES) "\
 	$script_dir/../../wb_openram_wrapper/gds/wb_openram_wrapper.gds \
 	$::env(PDK_ROOT)/$::env(PDK)/libs.ref/sky130_sram_macros/gds/sky130_sram_1kbyte_1rw1r_32x256_8.gds"
-
-## $script_dir/../../openram_testchip/gds/sky130_sram_1kbyte_1rw1r_32x256_8.gds"
 
 # use 4 cores
 set ::env(ROUTING_CORES) 4
@@ -79,10 +86,6 @@ set ::env(GLB_RT_MAXLAYER) 5
 set ::env(FP_HORIZONTAL_HALO) 20
 set ::env(FP_VERTICAL_HALO) 20
 
-# disable pdn check nodes becuase it hangs with multiple power domains.
-# any issue with pdn connections will be flagged with LVS so it is not a critical check.
-set ::env(FP_PDN_CHECK_NODES) 0
-
 # The following is because there are no std cells in the example wrapper project.
 set ::env(SYNTH_TOP_LEVEL) 1
 set ::env(PL_RANDOM_GLB_PLACEMENT) 1
@@ -91,8 +94,6 @@ set ::env(PL_RESIZER_DESIGN_OPTIMIZATIONS) 0
 set ::env(PL_RESIZER_TIMING_OPTIMIZATIONS) 0
 set ::env(PL_RESIZER_BUFFER_INPUT_PORTS) 0
 set ::env(PL_RESIZER_BUFFER_OUTPUT_PORTS) 0
-
-set ::env(FP_PDN_ENABLE_RAILS) 0
 
 set ::env(DIODE_INSERTION_STRATEGY) 0
 set ::env(FILL_INSERTION) 0
