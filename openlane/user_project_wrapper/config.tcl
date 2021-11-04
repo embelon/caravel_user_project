@@ -46,14 +46,13 @@ set ::env(CLOCK_PERIOD) "10"
 ## Internal Macros
 ### Macro PDN Connections
 set ::env(FP_PDN_ENABLE_MACROS_GRID) "1"
+set ::env(FP_PDN_CORE_RING) "1"
 ## set ::env(FP_PDN_ENABLE_GLOBAL_CONNECTIONS) "1"
 
 set ::env(FP_PDN_MACRO_HOOKS) "\
 	wb_openram_wrapper vccd1 vssd1 \
 	openram_1kB vccd1 vssd1 "
 
-## set ::env(VDD_NETS) "vccd1"
-## set ::env(GND_NETS) "vssd1"
 set ::env(VDD_NETS) "vccd1 vccd2 vdda1 vdda2"
 set ::env(GND_NETS) "vssd1 vssd2 vssa1 vssa2"
 
@@ -65,6 +64,8 @@ set ::env(FP_PDN_ENABLE_RAILS) 0
 
 ### Macro Placement
 set ::env(MACRO_PLACEMENT_CFG) $script_dir/macro.cfg
+# This is workaround for precheck issues with met4 clearance after maglef substitution for OpenRAM
+set ::env(GLB_RT_OBS) "met4 1000 1000 1479.78 1397.50"
 
 ### Black-box verilog and views
 set ::env(VERILOG_FILES_BLACKBOX) "\
