@@ -90,6 +90,13 @@ wire [7:0] openram_addr0;
 wire [31:0] openram_din0;
 wire [31:0] openram_dout0;
 
+wire openram_clk1;
+wire openram_csb1;
+wire openram_web1;
+wire [7:0] openram_addr1;
+wire [31:0] openram_dout0;
+
+
 sky130_sram_1kbyte_1rw1r_32x256_8 openram_1kB
 (
 `ifdef USE_POWER_PINS
@@ -97,13 +104,18 @@ sky130_sram_1kbyte_1rw1r_32x256_8 openram_1kB
     .vssd1 (vssd1),
 `endif
 
-    .clk0 (openram_clk0),
-    .csb0 (openram_csb0),
-    .web0 (openram_web0),
-    .wmask0 (openram_wmask0),
-    .addr0 (openram_addr0),
-    .din0 (openram_din0),
-    .dout0 (openram_dout0)
+    .clk0       (openram_clk0),
+    .csb0       (openram_csb0),
+    .web0       (openram_web0),
+    .wmask0     (openram_wmask0),
+    .addr0      (openram_addr0),
+    .din0       (openram_din0),
+    .dout0      (openram_dout0),
+
+    .clk0       (openram_clk1),
+    .csb0       (openram_csb1),
+    .addr0      (openram_addr1),
+    .dout0      (openram_dout1)
 );
 
 wb_openram_wrapper wb_openram_wrapper
@@ -111,7 +123,9 @@ wb_openram_wrapper wb_openram_wrapper
 `ifdef USE_POWER_PINS
     .vccd1 (vccd1),	    // User area 1 1.8V supply
     .vssd1 (vssd1),	    // User area 1 digital ground
- `endif
+`endif
+
+    .writable_port (0),
 
     // Wishbone port A
     .wb_clk_i (wb_clk_i),
@@ -132,8 +146,14 @@ wb_openram_wrapper wb_openram_wrapper
     .ram_web0 (openram_web0),       // active low write control
     .ram_wmask0 (openram_wmask0),   // write mask
     .ram_addr0 (openram_addr0),
-    .ram_din0 (openram_dout0),
-    .ram_dout0 (openram_din0)
+    .ram_din0 (openram_din0),
+    .ram_dout0 (openram_dout0),
+
+    // Port 1: R
+    .ram_clk1 (openram_clk1),       // clock
+    .ram_csb1 (openram_csb1),       // active low chip select
+    .ram_addr1 (openram_addr1),
+    .ram_dout1 (openram_dout1)
 );
 
 endmodule	// user_project_wrapper
