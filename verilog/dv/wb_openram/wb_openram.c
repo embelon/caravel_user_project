@@ -89,6 +89,12 @@ void main()
 	reg_mprj_xfer = 1;
 	while (reg_mprj_xfer == 1);
 
+	// Connect RW port of OpenRAM to WB0 that is connected to picorv32
+	reg_la0_iena = 0; // input enable off
+	reg_la0_oenb = 0; // output enable on
+	reg_la0_data = 1;
+	reg_la0_data = 0;
+
 	// Flag start of the test
 	reg_mprj_datal = 0xAB600000;
 
@@ -97,6 +103,27 @@ void main()
 	{
 		// generate some dword based on address
 		OPENRAM_MEM(address) = generate_value(address);
+	}
+
+	// Check memory
+	for (address = 0; address < OPENRAM_SIZE_DWORDS; address += 32)
+	{
+		// check dword based on address
+		if (OPENRAM_MEM(address) != generate_value(address))
+		{
+			reg_mprj_datal = 0xAB7E0000;		
+			return;							// instant fail
+		}
+	}
+
+	// Connect R port of OpenRAM to WB0 that is connected to picorv32
+	reg_la0_data = 1;
+	reg_la0_oenb = 1;
+
+	// Try to overwrite memory
+	for (address = 0; address < OPENRAM_SIZE_DWORDS; address += 32)
+	{
+		OPENRAM_MEM(address) = 0;
 	}
 
 	// Check memory
