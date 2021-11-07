@@ -94,7 +94,7 @@ wire openram_clk1;
 wire openram_csb1;
 wire openram_web1;
 wire [7:0] openram_addr1;
-wire [31:0] openram_dout0;
+wire [31:0] openram_dout1;
 
 
 sky130_sram_1kbyte_1rw1r_32x256_8 openram_1kB
@@ -112,10 +112,10 @@ sky130_sram_1kbyte_1rw1r_32x256_8 openram_1kB
     .din0       (openram_din0),
     .dout0      (openram_dout0),
 
-    .clk0       (openram_clk1),
-    .csb0       (openram_csb1),
-    .addr0      (openram_addr1),
-    .dout0      (openram_dout1)
+    .clk1       (openram_clk1),
+    .csb1       (openram_csb1),
+    .addr1      (openram_addr1),
+    .dout1      (openram_dout1)
 );
 
 wb_openram_wrapper wb_openram_wrapper
@@ -125,19 +125,19 @@ wb_openram_wrapper wb_openram_wrapper
     .vssd1 (vssd1),	    // User area 1 digital ground
 `endif
 
-    .writable_port (0),
+    .writable_port (1'b0),
 
-    // Wishbone port A
-    .wb_clk_i (wb_clk_i),
-    .wb_rst_i (wb_rst_i),
-    .wbs_stb_i (wbs_stb_i),
-    .wbs_cyc_i (wbs_cyc_i),
-    .wbs_we_i (wbs_we_i),
-    .wbs_sel_i (wbs_sel_i),
-    .wbs_dat_i (wbs_dat_i),
-    .wbs_adr_i (wbs_adr_i),
-    .wbs_ack_o (wbs_ack_o),
-    .wbs_dat_o (wbs_dat_o),
+    // Wishbone port 0
+    .wb0_clk_i (wb_clk_i),
+    .wb0_rst_i (wb_rst_i),
+    .wbs0_stb_i (wbs_stb_i),
+    .wbs0_cyc_i (wbs_cyc_i),
+    .wbs0_we_i (wbs_we_i),
+    .wbs0_sel_i (wbs_sel_i),
+    .wbs0_dat_i (wbs_dat_i),
+    .wbs0_adr_i (wbs_adr_i),
+    .wbs0_ack_o (wbs_ack_o),
+    .wbs0_dat_o (wbs_dat_o),
 
     // OpenRAM interface
     // Port 0: RW
