@@ -125,7 +125,7 @@ wb_openram_wrapper wb_openram_wrapper
     .vssd1 (vssd1),	    // User area 1 digital ground
 `endif
 
-    .writable_port (1'b0),
+    .writable_port (la_oenb[0]),
 
     // Wishbone port 0
     .wb0_clk_i (wb_clk_i),
