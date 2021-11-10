@@ -30,11 +30,11 @@ module wb_openram_tb;
 
     wire gpio;
     wire [37:0] mprj_io;
-	wire [11:0] checkpoint;
-	wire [3:0] status;
+	wire [5:0] checkpoint;
+	wire [1:0] status;
 
-	assign checkpoint = mprj_io[31:20];
-	assign status = mprj_io[19:16];
+	assign checkpoint = mprj_io[31:26];
+	assign status = mprj_io[25:24];
 
 
 	// External clock is used by default.  Make this artificially fast for the
@@ -67,14 +67,14 @@ module wb_openram_tb;
 	end
 
 	initial begin
-		wait(checkpoint == 12'h AB6);
+		wait(checkpoint == 6'b101010);		// A8
 		`ifdef GL
 			$display("Monitor: Test OpenRAM Project IO (GL) Started");
 		`else
 			$display("Monitor: Test OpenRAM Project IO (RTL) Started");
 		`endif
-		wait(checkpoint == 12'h AB7);
-		if (status == 4'h 0) begin
+		wait(checkpoint == 6'b101011);		// AC, AE, AF
+		if (status == 2'b00) begin
 			`ifdef GL
 				$display("Monitor: Test OpenRAM Project IO (GL) Passed");
 			`else

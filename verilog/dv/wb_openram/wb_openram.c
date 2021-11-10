@@ -20,8 +20,8 @@
 #include "verilog/dv/caravel/stub.c"
 
 // Caravel allows user project to use 0x30xx_xxxx address space on Wishbone bus
-// 0x3000_0000 till 3000_03ff -> 256 Words of OpenRAM (1024 Bytes)
-#define OPENRAM_BASE_ADDRESS	0x30000000
+// 0x30c0_0000 till 30c0_03ff -> 256 Words of OpenRAM (1024 Bytes)
+#define OPENRAM_BASE_ADDRESS	0x30c00000
 #define OPENRAM_SIZE_DWORDS		256ul			
 #define OPENRAM_SIZE_BYTES		(4ul * OPENRAM_SIZE_DWORDS)
 #define OPENRAM_ADDRESS_MASK	(OPENRAM_SIZE_BYTES - 1)
@@ -30,8 +30,9 @@
 // Generates 32bits wide value out of address, not random
 unsigned long generate_value(unsigned long address)
 {
-	return ((address & OPENRAM_ADDRESS_MASK) << 19) | 
-			((~address & OPENRAM_ADDRESS_MASK) << 1);
+	return ((~address & OPENRAM_ADDRESS_MASK) << 19) + 
+			((~address & OPENRAM_ADDRESS_MASK) << 12) ^
+			((~address & OPENRAM_ADDRESS_MASK) << 2);
 }
 
 void main()
@@ -76,21 +77,13 @@ void main()
 	reg_mprj_io_26 = GPIO_MODE_MGMT_STD_OUTPUT;
 	reg_mprj_io_25 = GPIO_MODE_MGMT_STD_OUTPUT;
 	reg_mprj_io_24 = GPIO_MODE_MGMT_STD_OUTPUT;
-	reg_mprj_io_23 = GPIO_MODE_MGMT_STD_OUTPUT;
-	reg_mprj_io_22 = GPIO_MODE_MGMT_STD_OUTPUT;
-	reg_mprj_io_21 = GPIO_MODE_MGMT_STD_OUTPUT;
-	reg_mprj_io_20 = GPIO_MODE_MGMT_STD_OUTPUT;
-	reg_mprj_io_19 = GPIO_MODE_MGMT_STD_OUTPUT;
-	reg_mprj_io_18 = GPIO_MODE_MGMT_STD_OUTPUT;
-	reg_mprj_io_17 = GPIO_MODE_MGMT_STD_OUTPUT;
-	reg_mprj_io_16 = GPIO_MODE_MGMT_STD_OUTPUT;
 
 	/* Apply configuration */
 	reg_mprj_xfer = 1;
 	while (reg_mprj_xfer == 1);
 
 	// Flag start of the test
-	reg_mprj_datal = 0xAB600000;
+	reg_mprj_datal = 0xA8000000;
 
 	// Fill memory
 	for (address = 0; address < OPENRAM_SIZE_DWORDS; address += 32)
@@ -105,11 +98,11 @@ void main()
 		// check dword based on address
 		if (OPENRAM_MEM(address) != generate_value(address))
 		{
-			reg_mprj_datal = 0xAB7E0000;		
+			reg_mprj_datal = 0xAF000000;		
 			return;							// instant fail
 		}
 	}
 
-	reg_mprj_datal = 0xAB700000;			// pass
+	reg_mprj_datal = 0xAC000000;			// pass
 }
 
