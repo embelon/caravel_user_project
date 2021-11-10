@@ -39,9 +39,9 @@ set ::env(VERILOG_FILES) "\
 
 ## Clock configurations
 set ::env(CLOCK_PORT) [list {wb_clk_i user_clock2}]
-set ::env(CLOCK_NET) [list {openram_1kB.openram_clk0 wb_openram_wrapper.wb_clk_i}]
+set ::env(CLOCK_NET) [list {openram_1kB.openram_clk0 wb_openram_wrapper.wb_clk_i wb_bus_mux.wb_clk_i}]
 
-set ::env(CLOCK_PERIOD) "10"
+set ::env(CLOCK_PERIOD) "13"
 
 ## Internal Macros
 ### Macro PDN Connections
@@ -51,7 +51,8 @@ set ::env(FP_PDN_CORE_RING) "1"
 
 set ::env(FP_PDN_MACRO_HOOKS) "\
 	wb_openram_wrapper vccd1 vssd1 \
-	openram_1kB vccd1 vssd1 "
+	openram_1kB vccd1 vssd1 \
+	wb_bus_mux vccd1 vssd1 "
 
 set ::env(VDD_NETS) "vccd1 vccd2 vdda1 vdda2"
 set ::env(GND_NETS) "vssd1 vssd2 vssa1 vssa2"
@@ -71,14 +72,17 @@ set ::env(GLB_RT_OBS) "met4 1000 1000 1479.78 1397.50"
 set ::env(VERILOG_FILES_BLACKBOX) "\
 	$::env(CARAVEL_ROOT)/verilog/rtl/defines.v \
 	$script_dir/../../wb_openram_wrapper/src/wb_openram_wrapper.v \
+	$script_dir/../../wb_ram_bus_mux/src/wb_ram_bus_mux.v \
 	$::env(PDK_ROOT)/$::env(PDK)/libs.ref/sky130_sram_macros/verilog/sky130_sram_1kbyte_1rw1r_32x256_8.v"
 
 set ::env(EXTRA_LEFS) "\
 	$script_dir/../../wb_openram_wrapper/lef/wb_openram_wrapper.lef \
+	$script_dir/../../wb_ram_bus_mux/lef/wb_ram_bus_mux.lef \
 	$::env(PDK_ROOT)/$::env(PDK)/libs.ref/sky130_sram_macros/lef/sky130_sram_1kbyte_1rw1r_32x256_8.lef"
 
 set ::env(EXTRA_GDS_FILES) "\
 	$script_dir/../../wb_openram_wrapper/gds/wb_openram_wrapper.gds \
+	$script_dir/../../wb_ram_bus_mux/gds/wb_ram_bus_mux.gds \
 	$::env(PDK_ROOT)/$::env(PDK)/libs.ref/sky130_sram_macros/gds/sky130_sram_1kbyte_1rw1r_32x256_8.gds"
 
 # use 4 cores
