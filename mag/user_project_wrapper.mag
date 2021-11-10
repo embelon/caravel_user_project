@@ -1,7 +1,7 @@
 magic
 tech sky130A
 magscale 1 2
-timestamp 1636013078
+timestamp 1636575507
 << locali >>
 rect 403449 199903 403483 199937
 rect 408325 199903 408359 201705
@@ -60015,11 +60015,11 @@ rect 592298 -7622 592382 -7386
 rect 592618 -7622 592650 -7386
 rect -8726 -7654 592650 -7622
 use wb_openram_wrapper  wb_openram_wrapper
-timestamp 1636013078
+timestamp 1636575507
 transform 1 0 400000 0 1 200000
 box 0 280 8000 59696
 use sky130_sram_1kbyte_1rw1r_32x256_8  openram_1kB
-timestamp 1636013078
+timestamp 1636575507
 transform 1 0 200000 0 1 200000
 box 0 0 95956 79500
 << labels >>
