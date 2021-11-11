@@ -32,13 +32,17 @@ set ::env(DESIGN_NAME) user_project_wrapper
 
 # User Configurations
 
+# save some time
+set ::env(RUN_KLAYOUT_XOR) 0
+set ::env(RUN_KLAYOUT_DRC) 0
+
 ## Source Verilog Files
 set ::env(VERILOG_FILES) "\
 	$::env(CARAVEL_ROOT)/verilog/rtl/defines.v \
 	$script_dir/../../verilog/rtl/user_project_wrapper.v"
 
 ## Clock configurations
-set ::env(CLOCK_PORT) [list {wb_clk_i user_clock2}]
+set ::env(CLOCK_PORT) "wb_clk_i"
 set ::env(CLOCK_NET) [list {openram_1kB.openram_clk0 wb_openram_wrapper.wb_clk_i wb_bus_mux.wb_clk_i wb_hyperram.wb_clk_i}]
 
 set ::env(CLOCK_PERIOD) "13"
@@ -55,8 +59,8 @@ set ::env(FP_PDN_MACRO_HOOKS) "\
 	wb_bus_mux vccd1 vssd1 \
 	wb_hyperram vccd1 vssd1 "
 
-set ::env(VDD_NETS) "vccd1 vccd2 vdda1 vdda2"
-set ::env(GND_NETS) "vssd1 vssd2 vssa1 vssa2"
+#set ::env(VDD_NETS) "vccd1 vccd2 vdda1 vdda2"
+#set ::env(GND_NETS) "vssd1 vssd2 vssa1 vssa2"
 
 # disable pdn check nodes becuase it hangs with multiple power domains.
 # any issue with pdn connections will be flagged with LVS so it is not a critical check.
