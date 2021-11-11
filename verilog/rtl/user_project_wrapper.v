@@ -157,9 +157,9 @@ wb_openram_wrapper wb_openram_wrapper
 );
 
 
-wire hb_dq_oen;
+// wire hb_dq_oen;
 
-wb_hyperram hyperram 
+wb_hyperram wb_hyperram 
 (
 `ifdef USE_POWER_PINS
     .vccd1 (vccd1),	    // User area 1 1.8V supply
@@ -188,11 +188,11 @@ wb_hyperram hyperram
     .hb_rwds_oen    (io_oeb[12]),
     .hb_rwds_i      (io_in[12]),        
     .hb_dq_o        (io_out[20:13]),
-    .hb_dq_oen      (hb_dq_oen),
+    .hb_dq_oen      (io_oeb[20:13]),
     .hb_dq_i        (io_in[20:13])
 );
 
-assign io_oeb[20:13] = {8{hb_dq_oen}};
+//assign io_oeb[20:13] = {8{hb_dq_oen}};
 
 // enable outputs for rst, csn, clk, clkn 
 assign io_oeb[11:8] = 4'h0;
