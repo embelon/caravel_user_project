@@ -20,12 +20,33 @@
 #include "verilog/dv/caravel/stub.c"
 
 // Caravel allows user project to use 0x30xx_xxxx address space on Wishbone bus
+// OpenRAM
 // 0x30c0_0000 till 30c0_03ff -> 256 Words of OpenRAM (1024 Bytes)
 #define OPENRAM_BASE_ADDRESS	0x30c00000
 #define OPENRAM_SIZE_DWORDS		256ul			
 #define OPENRAM_SIZE_BYTES		(4ul * OPENRAM_SIZE_DWORDS)
 #define OPENRAM_ADDRESS_MASK	(OPENRAM_SIZE_BYTES - 1)
 #define OPENRAM_MEM(offset)		(*(volatile uint32_t*)(OPENRAM_BASE_ADDRESS + (offset & OPENRAM_ADDRESS_MASK)))
+
+// Caravel allows user project to use 0x30xx_xxxx address space on Wishbone bus
+// HyperRAM has 8MB -> mask is 0x007fffff
+// 0x3000_0000 till 307f_ffff -> RAM / MEM inisde chip
+#define hyperram_mem_base_address	0x30000000
+#define hyperram_mem_mask			0x007fffff
+#define hyperram_mem(offset)		(*(volatile uint32_t*)(hyperram_mem_base_address + (offset & hyperram_mem_mask)))
+// 0x3080_00xx -> register space inside chip
+#define hyperram_reg_base_address	0x30800000
+#define hyperram_reg_mask			0x0000ffff
+#define hyperram_reg(num)			(*(volatile uint32_t*)(hyperram_reg_base_address + ((2 * num) & hyperram_reg_mask)))
+// 0x3081_00xx -> CSR space for driver / peripheral configuration
+#define hyperram_csr_base_address	0x30810000
+#define hyperram_csr_mask			0x0000ffff
+#define hyperram_csr_latency		(*(volatile uint32_t*)(hyperram_csr_base_address + 0x00))
+#define hyperram_csr_tpre_tpost		(*(volatile uint32_t*)(hyperram_csr_base_address + 0x04))
+#define hyperram_csr_tcsh			(*(volatile uint32_t*)(hyperram_csr_base_address + 0x08))
+#define hyperram_csr_trmax			(*(volatile uint32_t*)(hyperram_csr_base_address + 0x0c))
+#define hyperram_csr_status			(*(volatile uint32_t*)(hyperram_csr_base_address + 0x10))
+
 
 // Generates 32bits wide value out of address, not random
 unsigned long generate_value(unsigned long address)
@@ -82,8 +103,16 @@ void main()
 	reg_mprj_xfer = 1;
 	while (reg_mprj_xfer == 1);
 
+	// reset HyperRAM IP
+	reg_la0_oenb = 0;
+	reg_la0_iena = 0;
+	reg_la0_data = 1;
+	reg_la0_data = 0;
+
 	// Flag start of the test
 	reg_mprj_datal = 0xA8000000;
+
+	// OpenRAM test
 
 	// Fill memory
 	for (address = 0; address < OPENRAM_SIZE_DWORDS; address += 32)
@@ -103,6 +132,42 @@ void main()
 		}
 	}
 
+    // HyperRAM test
+
+	// write register space inside hyperram
+	hyperram_reg(0x2) = 0xa573;
+
+	// write memory, low addresses, default tacc (latency) is 6 cycles (default)
+	hyperram_mem(0x320) = 0xfecdba89;
+	hyperram_mem(0x1234) = 0x13579246;
+
+	// write latency csr
+	// fixed & double latency
+	// tacc = 4 cycles
+	hyperram_csr_latency = 0x34;
+	// read latency csr
+	volatile uint32_t read = hyperram_csr_latency;
+	// if write unsucessful, loop until timeout
+	if (read != 0x34)
+	{
+		reg_mprj_datal = 0xAF000000;
+		return; 							// instant fail		
+	}
+
+	// write memory, high addresses, tacc should be now 4 cycles
+	hyperram_mem(0x123450) = 0x12874562;
+	hyperram_mem(0x7ffff4) = 0x77f77f77;
+
+	// try to read memory and trigger timeout - there's no chip connected
+	read = hyperram_mem(0x135);
+/*
+	read = hyperram_csr_status;
+	if (hyperram_csr_status != 1)
+	{
+		reg_mprj_datal = 0xAF000000;
+		return; 							// instant fail
+	}
+*/
 	reg_mprj_datal = 0xAC000000;			// pass
 }
 

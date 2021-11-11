@@ -7,3 +7,6 @@
 [submodule "wb_ram_bus_mux"]
 	path = wb_ram_bus_mux
 	url = https://github.com/embelon/wb_ram_bus_mux.git
+[submodule "wb_hyperram"]
+	path = wb_hyperram
+	url = https://github.com/embelon/wb_hyperram.git

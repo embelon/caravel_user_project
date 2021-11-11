@@ -100,6 +100,15 @@ wire [31:0] wbs_or_dat_i;
 wire wbs_or_ack;
 wire [31:0] wbs_or_dat_o;
 
+// Signals connecting HyperRAM wrapper to Bus MUX
+wire wbs_hr_stb;
+wire wbs_hr_cyc;
+wire wbs_hr_we;
+wire [3:0] wbs_hr_sel;
+wire [31:0] wbs_hr_dat_i;
+wire wbs_hr_ack;
+wire [31:0] wbs_hr_dat_o;
+
 
 sky130_sram_1kbyte_1rw1r_32x256_8 openram_1kB
 (
@@ -147,6 +156,48 @@ wb_openram_wrapper wb_openram_wrapper
     .ram_dout0      (openram_din0)
 );
 
+
+wire hb_dq_oen;
+
+wb_hyperram hyperram 
+(
+`ifdef USE_POWER_PINS
+    .vccd1 (vccd1),	    // User area 1 1.8V supply
+    .vssd1 (vssd1),	    // User area 1 digital ground
+`endif
+
+    .wb_clk_i       (wb_clk_i),
+    .wb_rst_i       (wb_rst_i),
+
+    .wbs_stb_i      (wbs_hr_stb),
+    .wbs_cyc_i      (wbs_hr_cyc),
+    .wbs_we_i       (wbs_hr_we),
+    .wbs_sel_i      (wbs_hr_sel),
+    .wbs_dat_i      (wbs_hr_dat_o),
+    .wbs_adr_i      (wbs_adr_i),
+    .wbs_ack_o      (wbs_hr_ack),
+    .wbs_dat_o      (wbs_hr_dat_i),
+
+    .rst_i          (la_data_in[0]),
+
+    .hb_rstn_o      (io_out[8]),
+    .hb_csn_o       (io_out[9]),
+    .hb_clk_o       (io_out[10]),
+    .hb_clkn_o      (io_out[11]),
+    .hb_rwds_o      (io_out[12]),
+    .hb_rwds_oen    (io_oeb[12]),
+    .hb_rwds_i      (io_in[12]),        
+    .hb_dq_o        (io_out[20:13]),
+    .hb_dq_oen      (hb_dq_oen),
+    .hb_dq_i        (io_in[20:13])
+);
+
+assign io_oeb[20:13] = {8{hb_dq_oen}};
+
+// enable outputs for rst, csn, clk, clkn 
+assign io_oeb[11:8] = 4'h0;
+
+
 wb_ram_bus_mux wb_bus_mux
 (
 `ifdef USE_POWER_PINS
@@ -165,16 +216,15 @@ wb_ram_bus_mux wb_bus_mux
     .wbs_ufp_adr_i   (wbs_adr_i),
     .wbs_ufp_ack_o   (wbs_ack_o), 
     .wbs_ufp_dat_o   (wbs_dat_o),
-/*
+
     // Wishbone HR (Downward Facing Port) - HyperRAM driver
-    output          wbs_hr_stb_o,
-    output          wbs_hr_cyc_o,
-    output          wbs_hr_we_o,
-    output  [3:0]   wbs_hr_sel_o,
-    input   [31:0]  wbs_hr_dat_i,
-    input           wbs_hr_ack_i,
-    output  [31:0]  wbs_hr_dat_o,
-*/
+    .wbs_hr_stb_o    (wbs_hr_stb),
+    .wbs_hr_cyc_o    (wbs_hr_cyc),
+    .wbs_hr_we_o     (wbs_hr_we),
+    .wbs_hr_sel_o    (wbs_hr_sel),
+    .wbs_hr_dat_i    (wbs_hr_dat_i),
+    .wbs_hr_ack_i    (wbs_hr_ack),
+    .wbs_hr_dat_o    (wbs_hr_dat_o),    
 
     // Wishbone OR (Downward Facing Port) - OpenRAM
     .wbs_or_stb_o    (wbs_or_stb),
