@@ -52,9 +52,9 @@ module wb_openram_tb;
 		$dumpvars(0, wb_openram_tb);
 
 		// Repeat cycles of 10000 clock edges as needed to complete testbench
-		repeat (25) begin
-			repeat (10000) @(posedge clock);
-			$display("+10000 cycles");
+		repeat (12) begin
+			repeat (5000) @(posedge clock);
+			$display("+5000 cycles");
 		end
 		$display("%c[1;31m",27);
 		`ifdef GL
